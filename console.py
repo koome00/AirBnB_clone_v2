@@ -2,9 +2,8 @@
 """This is the console for AirBnB"""
 import re
 import cmd
-from models import storage
 from datetime import datetime
-from models.base_model import BaseModel
+from models.base_model import Base
 from models.user import User
 from models.state import State
 from models.city import City
