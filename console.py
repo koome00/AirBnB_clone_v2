@@ -10,6 +10,9 @@ from models.state import State
 from models.city import City
 from models.amenity import Amenity
 from models.review import Review
+from models import storage
+from datetime import datetime
+from shlex import split
 
 
 class HBNBCommand(cmd.Cmd):
@@ -289,11 +292,13 @@ class HBNBCommand(cmd.Cmd):
             args = args.partition(' ')
 
             # if att_name was not quoted arg
-            if not att_name and args[0] is not ' ':
+            if not att_name and args[0] != ' ':
                 att_name = args[0]
             # check for quoted val arg
             if args[2] == '\"' and args[2][0] == '\"':
                 att_val = args[2][1:args[2].find('\"', 1)]
+                if len(args) >= 3 and args[2][0] == '\"' and args[2][-1] == '\"':
+                    att_val = args[2][1:-1]
 
             # if att_val was not quoted arg
             if not att_val and args[2]:
