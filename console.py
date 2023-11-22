@@ -13,7 +13,7 @@ from models.review import Review
 from models import storage
 from datetime import datetime
 from shlex import split
-
+import re
 
 class HBNBCommand(cmd.Cmd):
     """ Contains the functionality for the HBNB console"""
