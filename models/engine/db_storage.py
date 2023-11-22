@@ -27,10 +27,7 @@ class DBStorage:
                                       pool_pre_ping=True)
         if getenv("HBNB_ENV") == "test":
             Base.metadata.drop_all(bind=self.__engine)
-
 # Create a session
-
-
 Session = sessionmaker(bind=self.__engine)
 print("Session is about to be created.")
 self.__session = Session()
@@ -41,13 +38,13 @@ def all(self, cls=None):
     """ Query on the current session all objects by class. """
     if cls is not None:
         res = self.__session.query(cls)
-        else:
-            res = self.__session.query(City).all()
-            res += self.__session.query(State).all()
-            res += self.__session.query(User).all()
-            res += self.__session.query(Place).all()
-            res += self.__session.query(Amenity).all()
-            res += self.__session.query(Review).all()
+    else:
+        res = self.__session.query(City).all()
+        res += self.__session.query(State).all()
+        res += self.__session.query(User).all()
+        res += self.__session.query(Place).all()
+        res += self.__session.query(Amenity).all()
+        res += self.__session.query(Review).all()
         output = {}
         for elem in res:
             key = '{}.{}'.format(type(elem).__name__, elem.id)
