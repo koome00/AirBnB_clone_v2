@@ -19,16 +19,19 @@ class FileStorage:
         __objects: objects will be stored
     """
     __file_path = "file.json"
-    __objects = {}
+    __objec: "objects stored"
 
     def all(self, cls=None):
         """returns a dictionary
         Return:
             returns a dictionary of __object
         """
-        if cls:
-            return {key: obj for (key, obj) in self.__objects.items()
-                    if isinstance(obj, type(cls))}
+        if cls is not None:
+            n_dict = {}
+            for key, value in self.__objects.items():
+                if cls == type(value):
+                    n_dict = {key: value}
+            return n_dict
         return self.__objects
 
     def new(self, obj):
