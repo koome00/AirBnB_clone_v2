@@ -28,16 +28,19 @@ class DBStorage:
         if getenv("HBNB_ENV") == "test":
             Base.metadata.drop_all(bind=self.__engine)
 
-            # Create a session
+# Create a session
+
+
 Session = sessionmaker(bind=self.__engine)
 print("Session is about to be created.")
 self.__session = Session()
 print("Session created successfully.")
 
-    def all(self, cls=None):
-        """ Query on the current session all objects by class. """
-        if cls is not None:
-            res = self.__session.query(cls)
+
+def all(self, cls=None):
+    """ Query on the current session all objects by class. """
+    if cls is not None:
+        res = self.__session.query(cls)
         else:
             res = self.__session.query(City).all()
             res += self.__session.query(State).all()
