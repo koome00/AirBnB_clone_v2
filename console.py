@@ -3,7 +3,7 @@
 import re
 import cmd
 from datetime import datetime
-from models.base_model import Base
+from models.base_model import Base, BaseModel
 from models.user import User
 from models.state import State
 from models.city import City
@@ -11,14 +11,20 @@ from models.amenity import Amenity
 from models.place import Place
 from models.review import Review
 from shlex import split
+from models import storage
 
 
 class HBNBCommand(cmd.Cmd):
     """this class is entry point of the command interpreter
     """
     prompt = "(hbnb) "
-    all_classes = {"BaseModel", "User", "State", "City",
-                   "Amenity", "Place", "Review"}
+    all_classes = {"BaseModel": BaseModel,
+               "City": City,
+               "User": User,
+               "Place": Place,
+               "Review": Review,
+               "State": State,
+               "Amenity": Amenity}
 
     def emptyline(self):
         """Ignores empty spaces"""
@@ -55,27 +61,29 @@ class HBNBCommand(cmd.Cmd):
             return   
 
     def do_show(self, line):
-        """Prints the string representation of an instance
-        Exceptions:
-            SyntaxError: when there is no args given
-            NameError: when there is no object taht has the name
-            IndexError: when there is no id given
-            KeyError: when there is no valid id given
         """
-        if line == "" or line is None:
+        Prints the string representation
+        of an instance based on the class name and id
+        """
+        args = line.split(" ")
+        if len(line) == 0:
             print("** class name missing **")
+            return
+            
+        if args[0] not in self.all_classes.keys():
+            print("** class doesn't exist **")
         else:
-            words = line.split(' ')
-            if words[0] not in storage.classes():
-                print("** class doesn't exist **")
-            elif len(words) < 2:
+            if len(args) == 1:
                 print("** instance id missing **")
-            else:
-                key = "{}.{}".format(words[0], words[1])
-                if key not in storage.all():
+
+            if len(args) == 2:
+                instance = "{}.{}".format(args[0], args[1])
+                for key, values in storage.all().items():
+                    if key == instance:
+                        print(values)
+            
+                if instance not in storage.all().keys():
                     print("** no instance found **")
-                else:
-                    print(storage.all()[key])
 
     def do_destroy(self, line):
         """Deletes an instance based on the class name and id

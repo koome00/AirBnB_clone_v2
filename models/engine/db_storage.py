@@ -41,13 +41,13 @@ def all(self, cls=None):
     """ Query on the current session all objects by class. """
     if cls is not None:
         res = self.__session.query(cls)
-        else:
-            res = self.__session.query(City).all()
-            res += self.__session.query(State).all()
-            res += self.__session.query(User).all()
-            res += self.__session.query(Place).all()
-            res += self.__session.query(Amenity).all()
-            res += self.__session.query(Review).all()
+    else:
+        res = self.__session.query(City).all()
+        res += self.__session.query(State).all()
+        res += self.__session.query(User).all()
+        res += self.__session.query(Place).all()
+        res += self.__session.query(Amenity).all()
+        res += self.__session.query(Review).all()
         output = {}
         for elem in res:
             key = '{}.{}'.format(type(elem).__name__, elem.id)

@@ -44,11 +44,14 @@ class FileStorage:
             json.dump(temp, f)
 
     def delete(self, obj=None):
-        """ deletes obj from objects"""
-        if obj is not None:
-            key = obj.__class__.__name__ + '.' + obj.id
-            if key in self.__objects.keys():
-                del self.__objects[key]
+        '''
+        Deletes an obj
+        '''
+        if obj == None:
+            return
+        else:
+            key = str(obj.__class__.__name__) + "." + str(obj.id)
+            FileStorage.__objects.pop(key, None)
             self.save()
 
     def reload(self):
