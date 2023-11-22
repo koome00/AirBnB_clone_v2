@@ -47,7 +47,7 @@ class HBNBCommand(cmd.Cmd):
         args = line.split(" ")        
         
         try:
-            instance = self.all_classes[args[0]]()
+            instance = HBNBCommand.all_classes[args[0]]()
             for parameter in args[1:]:
                 key = parameter.split('=')[0].strip("'")
                 value = parameter.split('=')[1].strip('"').strip("'")
@@ -70,7 +70,7 @@ class HBNBCommand(cmd.Cmd):
             print("** class name missing **")
             return
             
-        if args[0] not in self.all_classes.keys():
+        if args[0] not in HBNBCommand.all_classes.keys():
             print("** class doesn't exist **")
         else:
             if len(args) == 1:
@@ -86,36 +86,25 @@ class HBNBCommand(cmd.Cmd):
                     print("** no instance found **")
 
     def do_destroy(self, line):
-        """Deletes an instance based on the class name and id
-        Exceptions:
-            SyntaxError: when there is no args given
-            NameError: when there is no object taht has the name
-            IndexError: when there is no id given
-            KeyError: when there is no valid id given
         """
-        try:
-            if not line:
-                raise SyntaxError()
-            my_list = line.split(" ")
-            if my_list[0] not in self.all_classes:
-                raise NameError()
-            if len(my_list) < 2:
-                raise IndexError()
-            objects = storage.all()
-            key = my_list[0] + '.' + my_list[1]
-            if key in objects:
-                del objects[key]
-                storage.save()
+        Deletes an instance based on the class name and id
+        """
+        if line:
+            args = line.split(' ')
+            if args[0] in HBNBCommand.all_classes:
+                if len(args) == 1:
+                    print("** instance id missing **")
+                else:
+                    objs = storage.all()
+                    obj = "{}.{}".format(args[0], args[1])
+                    if obj in objs.keys():
+                        storage.delete(args[0], args[1])
+                    else:
+                        print("** no instance found **")
             else:
-                raise KeyError()
-        except SyntaxError:
+                print("** class doesn't exist **")
+        else:
             print("** class name missing **")
-        except NameError:
-            print("** class doesn't exist **")
-        except IndexError:
-            print("** instance id missing **")
-        except KeyError:
-            print("** no instance found **")
 
     def do_all(self, line):
         """Prints all string representation of all instances
@@ -124,7 +113,7 @@ class HBNBCommand(cmd.Cmd):
         """
         if line:
             args = line.split(" ")
-            if args[0] not in self.all_classes:
+            if args[0] not in HBNBCommand.all_classes:
                 print("** class doesn't exist **")
                 return
             objects = storage.all(line)
@@ -148,49 +137,29 @@ class HBNBCommand(cmd.Cmd):
         #     print("** class doesn't exist **")
 
     def do_update(self, line):
-        """Updates an instanceby adding or updating attribute
-        Exceptions:
-            SyntaxError: when there is no args given
-            NameError: when there is no object taht has the name
-            IndexError: when there is no id given
-            KeyError: when there is no valid id given
-            AttributeError: when there is no attribute given
-            ValueError: when there is no value given
+        """Update a instance based on the class name
         """
-        try:
-            if not line:
-                raise SyntaxError()
-            my_list = split(line, " ")
-            if my_list[0] not in self.all_classes:
-                raise NameError()
-            if len(my_list) < 2:
-                raise IndexError()
-            objects = storage.all()
-            key = my_list[0] + '.' + my_list[1]
-            if key not in objects:
-                raise KeyError()
-            if len(my_list) < 3:
-                raise AttributeError()
-            if len(my_list) < 4:
-                raise ValueError()
-            v = objects[key]
-            try:
-                v.__dict__[my_list[2]] = eval(my_list[3])
-            except Exception:
-                v.__dict__[my_list[2]] = my_list[3]
-                v.save()
-        except SyntaxError:
+        if line:
+            args = line.split(' ')
+            if len(args) == 1:
+                print("** instance id missing **")
+            elif len(args) == 2:
+                print("** attribute name missing **")
+            elif len(args) == 3:
+                print("** value missing **")
+            elif args[0] in HBNBCommand.classes:
+                objs = storage.all()
+                obj = "{}.{}".format(args[0], args[1])
+                if obj in objs.keys():
+                    label = getattr(objs[obj], args[2], "")
+                    setattr(objs[obj], args[2], type(label)(args[3]))
+                    objs[obj].save()
+                else:
+                    print("** no instance found **")
+            else:
+                print("** class doesn't exist **")
+        else:
             print("** class name missing **")
-        except NameError:
-            print("** class doesn't exist **")
-        except IndexError:
-            print("** instance id missing **")
-        except KeyError:
-            print("** no instance found **")
-        except AttributeError:
-            print("** attribute name missing **")
-        except ValueError:
-            print("** value missing **")
 
     def count(self, line):
         """count the number of instances of a class
@@ -198,7 +167,7 @@ class HBNBCommand(cmd.Cmd):
         counter = 0
         try:
             my_list = split(line, " ")
-            if my_list[0] not in self.all_classes:
+            if my_list[0] not in HBNBCommand.all_classes:
                 raise NameError()
             objects = storage.all()
             for key in objects:
