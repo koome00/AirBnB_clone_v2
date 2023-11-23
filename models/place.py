@@ -4,8 +4,6 @@ from os import getenv
 from sqlalchemy import Column, String, Integer, Float, ForeignKey, Table
 from sqlalchemy.orm import relationship
 from models.base_model import BaseModel, Base
-from models.amenity import Amenity
-from models.review import Review
 import models
 
 place_amenity = Table('place_amenity', Base.metadata,
@@ -69,7 +67,7 @@ class Place(BaseModel, Base):
                 FileStorage relationship between Place and Review
             '''
             list_reviews = []
-            for review in models.storage.all(Review).values():
+            for review in models.storage.all("Review").values():
                 if review.place_id == self.id:
                     list_reviews.append(review)
             return list_reviews
@@ -89,6 +87,6 @@ class Place(BaseModel, Base):
                 Set by adding instance objs to amenity_ids attribute in Place
             '''
             if amenity:
-                for amenity in models.storage.all(Amenity).values():
+                for amenity in models.storage.all("Amenity").values():
                     if amenity.place_id == self.id:
                         Place.amenity_ids.append(amenity)
