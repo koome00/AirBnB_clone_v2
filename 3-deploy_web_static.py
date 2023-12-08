@@ -2,10 +2,13 @@
 """"
  -Fabric script (based on the file 1-pack_web_static.py) that distributes an
   archive to your web servers, using the function deploy
- -Prototype: def deploy():
+ -Prototypes:
+    def deploy():
+    def do_pack():
+    def do_deploy(archive_path):
 """
 
-from fabric.api import local, env
+from fabric.api import local, env, put, run
 from time import strftime
 import os.path
 env.hosts = ["100.26.156.173", "54.157.184.250"]
