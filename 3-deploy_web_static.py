@@ -13,6 +13,7 @@ from time import strftime
 import os.path
 env.hosts = ["100.26.156.173", "54.157.184.250"]
 
+
 def do_pack():
     """
     generates a tar archive of webstatic
@@ -25,6 +26,7 @@ def do_pack():
         return tar_file
     except:
         return None
+
 
 def do_deploy(archive_path):
     """
@@ -48,6 +50,7 @@ def do_deploy(archive_path):
         return True
     except:
         return False
+
 
 def deploy():
     """

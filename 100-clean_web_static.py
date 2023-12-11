@@ -9,10 +9,11 @@
     def do_clean
 """
 
-from fabric.api import local, env, put , run
+from fabric.api import local, env, put, run
 from time import strftime
 import os.path
 env.hosts = ["100.26.156.173", "54.157.184.250"]
+
 
 def do_pack():
     """
@@ -26,6 +27,7 @@ def do_pack():
         return tar_file
     except:
         return None
+
 
 def do_deploy(archive_path):
     """
@@ -50,6 +52,7 @@ def do_deploy(archive_path):
     except:
         return False
 
+
 def deploy():
     """
     distributes archives to web servers
@@ -60,6 +63,7 @@ def deploy():
         return deployed
     else:
         return False
+
 
 def do_clean(number=0):
     """
