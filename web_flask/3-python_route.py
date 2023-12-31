@@ -34,17 +34,14 @@ def display_c(text):
         message = text
     return 'C' + ' ' + message
 
-
+@app.route("/python", strict_slashes=False)
 @app.route("/python/<text>", strict_slashes=False)
-def display_python(text=""):
-    if text is True:
-        if '_' in text:
-            message = text.replace('_', ' ')
-        else:
-            message = text
-        return 'Python' + ' ' + message
+def display_python(text="is cool"):
+    if '_' in text:
+        message = text.replace('_', ' ')
     else:
-        return "Python is cool"
+        message = text
+    return 'Python' + ' ' + message
 
 
 if __name__ == "__main__":
