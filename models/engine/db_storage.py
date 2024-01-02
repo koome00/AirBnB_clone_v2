@@ -40,7 +40,8 @@ class DBStorage:
         db_dict = {}
 
         if cls is not None:
-            objs = self.__session.query(models.classes[cls]).all()
+            class_key = cls if inspect.isclass(cls) else cls.__name__
+            objs = self.__session.query(models.classes[class_key]).all()
         else:
             objs = [obj for k, v in models.classes.items() if k != "BaseModel"
                     and inspect.isclass(v) and issubclass(v, BaseModel)
