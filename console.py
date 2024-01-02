@@ -105,35 +105,24 @@ class HBNBCommand(cmd.Cmd):
         else:
             print("** class name missing **")
 
-    def do_all(self, line):
+    def do_all(self, name):
         """Prints all string representation of all instances
         Exceptions:
             NameError: when there is no object taht has the name
         """
-        if line:
-            args = line.split(" ")
-            if args[0] not in HBNBCommand.all_classes:
-                print("** class doesn't exist **")
-                return
-            objects = storage.all(line)
-        my_list = []
-        if not line:
-            objects = storage.all()
-            for key in objects:
-                my_list.append(objects[key])
-            print(my_list)
-            return
-        # try:
-            # args = line.split(" ")
-            # if args[0] not in self.all_classes:
-            #     raise NameError()
-        for key in objects:
-            name = key.split('.')
-            if name[0] == args[0]:
-                my_list.append(objects[key])
-        print(my_list)
-        # except NameError:
-        #     print("** class doesn't exist **")
+        list_objs = []
+        all_objs = list(storage.all().values())
+        if name == "":
+            for objs in all_objs:
+                list_objs.append(str(objs))
+            print(list_objs)
+        elif name in HBNBCommand.all_classes:
+            for objs in all_objs:
+                if HBNBCommand.all_classes.get(name) is type(objs):
+                    list_objs.append(str(objs))
+            print(list_objs)
+        else:
+            print("** class doesn't exist **")
 
     def do_update(self, line):
         """Update a instance based on the class name

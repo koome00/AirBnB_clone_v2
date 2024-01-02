@@ -8,7 +8,8 @@ from sqlalchemy.orm import sessionmaker, scoped_session
 import models
 from models.state import State
 from models.city import City
-from models.base_model import Base
+from models.base_model import Base, BaseModel
+import inspect
 
 
 class DBStorage:
@@ -34,26 +35,22 @@ class DBStorage:
 
     def all(self, cls=None):
         '''
-            Query current database session
+        Query current database session
         '''
         db_dict = {}
 
-        if cls != "":
+        if cls is not None:
             objs = self.__session.query(models.classes[cls]).all()
-            for obj in objs:
-                key = "{}.{}".format(obj.__class__.__name__, obj.id)
-                db_dict[key] = obj
-            return db_dict
         else:
-            for k, v in models.classes.items():
-                if k != "BaseModel":
-                    objs = self.__session.query(v).all()
-                    if len(objs) > 0:
-                        for obj in objs:
-                            key = "{}.{}".format(obj.__class__.__name__,
-                                                 obj.id)
-                            db_dict[key] = obj
-            return db_dict
+            objs = [obj for k, v in models.classes.items() if k != "BaseModel"
+                    and inspect.isclass(v) and issubclass(v, BaseModel)
+                    for obj in self.__session.query(v).all()]
+
+        for obj in objs:
+            key = "{}.{}".format(obj.__class__.__name__, obj.id)
+            db_dict[key] = obj
+
+        return db_dict
 
     def new(self, obj):
         '''

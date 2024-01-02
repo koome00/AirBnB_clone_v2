@@ -62,8 +62,8 @@ def html_if_int(n):
 
 @app.route('/number_odd_or_even/<int:n>', strict_slashes=False)
 def odd_or_even(n):
-    if n%2 == 0:
-        message = f"{n} is even" 
+    if n % 2 == 0:
+        message = f"{n} is even"
         return render_template('6-number_odd_or_even.html', n=message)
     else:
         message = f"{n} is odd"
