@@ -25,12 +25,23 @@ class FileStorage:
         """returns a dictionary
         Return:
             returns a dictionary of __object
+            can return dictionary of specific class ojects 
+            if provided with the class name
         """
-        if cls:
-            return {key: value for key, value in self.__objects.items()
-                    if cls == key.split('.')[0]}
+        new_dict = {}
+        if cls is None:
+            return self.__objects
+
+        if cls != "":
+            for k, v in self.__objects.items():
+                if cls == eval(k.split(".")[0]):
+                    new_dict[k] = v
+            return new_dict
         else:
             return self.__objects
+ 
+        
+        
 
     def new(self, obj):
         """sets __object to given obj
@@ -51,11 +62,15 @@ class FileStorage:
             json.dump(my_dict, f)
 
     def reload(self):
-        """serialize the file path to JSON file path
+        """deserialize the file path to JSON file path
         """
         try:
             with open(self.__file_path, 'r', encoding="UTF-8") as f:
                 for key, value in (json.load(f)).items():
+                    # the result of using eval will give us Class(Attributes)
+                    # eg. value = BaseModel(name="MyfirstModel", created_at=""..)
+                    # accesses the class name of the objects in the dictionary created
+                    # using value["__class__"]
                     value = eval(value["__class__"])(**value)
                     self.__objects[key] = value
         except FileNotFoundError:
