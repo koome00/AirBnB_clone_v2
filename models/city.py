@@ -3,11 +3,10 @@
     Define the class City.
 '''
 from os import getenv
-from sqlalchemy import Column, Integer, String, ForeignKey
+from sqlalchemy import Column, String, ForeignKey
 from sqlalchemy.orm import relationship
 from models.base_model import BaseModel, Base
 import models
-from models.state import State
 
 
 class City(BaseModel, Base):

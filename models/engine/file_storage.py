@@ -40,9 +40,6 @@ class FileStorage:
         else:
             return self.__objects
  
-        
-        
-
     def new(self, obj):
         """sets __object to given obj
         Args:
