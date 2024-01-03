@@ -16,6 +16,8 @@ Routes:
         H1 tag: “Number: n is even|odd” inside the tag BODY
 """
 
+from models import storage
+from models import *
 from flask import Flask, render_template
 
 app = Flask(__name__)
