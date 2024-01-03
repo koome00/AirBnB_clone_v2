@@ -45,26 +45,21 @@ class DBStorage:
         '''
         Query current database session
         '''
-        db_dict = {}
-        cls_dict = {}
-
-        if cls != "":
-            objs = self.__session.query(cls).all()
-            for obj in objs:
-                key = "{}.{}".format(obj.__class__.__name__, obj.id)
-                cls_dict[key] = obj
-            return cls_dict
-        else:
-            for k, v in models.classes.items():
-                if k != "BaseModel":
-                    objs = self.__session.query(v).all()
-                    if len(objs) > 0:
-                        for obj in objs:
-                            key = "{}.{}".format(obj.__class__.__name__,
-                                                 obj.id)
-                            db_dict[key] = obj
-            return db_dict
-
+        classes = {"User": User, "BaseModel": BaseModel,
+           "Place": Place, "State": State,
+           "City": City, "Amenity": Amenity,
+           "Review": Review}
+        result = {}
+        clses = [v for k, v in classes.items() if "BaseModel" not in k]
+        if cls is not None:
+            if isinstance(cls, str):
+                cls = classes[cls]
+            clses = [cls]
+        for c in clses:
+            for instance in self.__session.query(c):
+                key = "{}.{}".format(c().__class__.__name__, instance.id)
+                result[key] = instance
+        return result
     def new(self, obj):
         '''
             Add object to current database session

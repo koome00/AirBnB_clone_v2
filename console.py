@@ -77,7 +77,7 @@ class HBNBCommand(cmd.Cmd):
         args = line.split(" ")        
         
         try:
-            instance = HBNBCommand.all_classes[args[0]]()
+            instance = self.all_classes[args[0]]()
             for parameter in args[1:]:
                 key = parameter.split('=')[0].strip("'")
                 value = parameter.split('=')[1].strip('"').strip("'")
