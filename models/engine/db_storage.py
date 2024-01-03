@@ -45,14 +45,15 @@ class DBStorage:
         '''
         Query current database session
         '''
-    db_dict = {}
+        db_dict = {}
+        cls_dict = {}
 
         if cls != "":
-            objs = self.__session.query(models.classes[cls]).all()
+            objs = self.__session.query(cls).all()
             for obj in objs:
                 key = "{}.{}".format(obj.__class__.__name__, obj.id)
-                db_dict[key] = obj
-            return db_dict
+                cls_dict[key] = obj
+            return cls_dict
         else:
             for k, v in models.classes.items():
                 if k != "BaseModel":
