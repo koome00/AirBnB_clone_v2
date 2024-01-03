@@ -6,11 +6,15 @@ from os import getenv
 from sqlalchemy import create_engine, MetaData
 from sqlalchemy.orm import sessionmaker, scoped_session
 import models
-from models.state import State
-from models.city import City
 from models.base_model import Base, BaseModel
 import inspect
-
+from models.base_model import BaseModel
+from models.user import User
+from models.place import Place
+from models.state import State
+from models.city import City
+from models.amenity import Amenity
+from models.review import Review
 
 class DBStorage:
     '''
@@ -18,6 +22,10 @@ class DBStorage:
     '''
     __engine = None
     __session = None
+    classes = {"User": User, "BaseModel": BaseModel,
+           "Place": Place, "State": State,
+           "City": City, "Amenity": Amenity,
+           "Review": Review}
 
     def __init__(self):
         '''
@@ -37,11 +45,12 @@ class DBStorage:
         '''
         Query current database session
         '''
+
         db_dict = {}
 
         if cls is not None:
             class_key = cls.__name__
-            objs = self.__session.query(models.classes[class_key]).all()
+            objs = self.__session.query(self.classes[class_key]).all()
         else:
             objs = [obj for k, v in models.classes.items() if k != "BaseModel"
                     and inspect.isclass(v) and issubclass(v, BaseModel)
