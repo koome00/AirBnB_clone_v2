@@ -29,7 +29,12 @@ class HBNBCommand(cmd.Cmd):
     def emptyline(self):
         """Ignores empty spaces"""
         pass
-
+    
+    def do_EOF(self, line):
+        """Handle EOF (Ctrl+D) to exit the console"""
+        print()
+        return True
+    
     def do_quit(self, line):
         """Quit command to exit the program"""
         return True
