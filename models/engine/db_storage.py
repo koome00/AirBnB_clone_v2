@@ -102,5 +102,4 @@ class DBStorage:
         '''
             Remove private session attribute
         '''
-        if self.__session:
-            self.__session.remove()
+        self.__session.remove()
