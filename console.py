@@ -38,23 +38,23 @@ class HBNBCommand(cmd.Cmd):
         """Quit command to exit the program at end of file"""
         return True
 
-    def do_create(self, args):
+    def do_create(self, arg):
         '''
             Create a new instance of class BaseModel and saves it
             to the JSON file.
         '''
-        if len(args) == 0:
+        if len(arg) == 0:
             print("** class name missing **")
             return
         try:
-            args = shlex.split(args)
-            new_instance = eval(args[0])()
+            args = arg.split(" ")
+            new_instance = HBNBCommand.all_classes[args[0]]()
             for i in args[1:]:
                 try:
-                    key = i.split("=")[0]
-                    value = i.split("=")[1]
-                    if hasattr(new_instance, key) is True:
-                        value = value.replace("_", " ")
+                    key = i.split('=')[0]
+                    value = i.split('=').strip('"')[1]
+                    if hasattr(new_instance, key):
+                        value = value.replace("_", ' ')
                         try:
                             value = eval(value)
                         except:
@@ -62,34 +62,12 @@ class HBNBCommand(cmd.Cmd):
                         setattr(new_instance, key, value)
                 except (ValueError, IndexError):
                     pass
-            new_instance.save()
-            print(new_instance.id)
+                new_instance.save()
+                print(new_instance.id)
         except:
-            print("** class doesn't exist **")
-            return
-    
-    def do_create(self, line):
-        "Creates a new instance of BaseModel"
-        if len(line) == 0:
-            print("** class name missing **")
-            return
-        
-        args = line.split(" ")        
-        
-        try:
-            instance = self.all_classes[args[0]]()
-            for parameter in args[1:]:
-                key = parameter.split('=')[0].strip("'")
-                value = parameter.split('=')[1].strip('"').strip("'")
-                if hasattr(instance, key) is True:
-                    value = value.replace("_", " ")
-                setattr(instance, key, value)
-            instance.save()
-            print(instance.id)
-        except:
-            print("** class doesn't exist **")
-            return   
-
+                print("** class doesn't exist **")
+                return
+ 
     def do_show(self, line):
         """
         Prints the string representation
