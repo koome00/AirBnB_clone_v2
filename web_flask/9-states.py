@@ -82,18 +82,14 @@ def tear_down(self):
 
 @app.route('/states')
 @app.route('/states_list')
-@app.route('/states/<n>', strict_slashes=False)
-def state_id(n):
+def html_fetch_states():
+    """display html page
+       fetch sorted states to insert into html in UL tag
     """
-        Route /states/<id> to display specific state with given id
-    """
-    states = storage.all(classes["State"])
-    state_key = "State.{}".format(n)
-    if state_key in states:
-        state = states[state_key]
-    else:
-        state = None
-    return render_template('9-states.html', state=state)
+    state_objs = [s for s in storage.all("State").values()]
+    return render_template('7-states_list.html',
+                           state_objs=state_objs)
+
 
 @app.route('/cities_by_states')
 def html_fetch_cities_by_states():

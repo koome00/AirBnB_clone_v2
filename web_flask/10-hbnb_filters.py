@@ -9,11 +9,12 @@ script starts Flask web app
             /number/<n>:          display "n is a number" only if int
             /number_template/<n>: display HTML page only if n is int
             /number_odd_or_even/<n>: display HTML page; display odd/even info
-            /states_list:         display HTML and state info from storage
+            /states_list & /states:  display HTML and state info from storage
             /cities_by_states:    display HTML and state, city relations
+            /states/<id>:         display HTML and state, city given state id
+            /hbnb_filters:        display a HTML page like 6-index.html
 """
 from models import storage
-from models import *
 from flask import Flask, render_template
 app = Flask(__name__)
 app.url_map.strict_slashes = False
@@ -79,6 +80,7 @@ def tear_down(self):
     storage.close()
 
 
+@app.route('/states')
 @app.route('/states_list')
 def html_fetch_states():
     """display html page
@@ -98,6 +100,30 @@ def html_fetch_cities_by_states():
     state_objs = [s for s in storage.all("State").values()]
     return render_template('8-cities_by_states.html',
                            state_objs=state_objs)
+
+
+@app.route('/states/<id>')
+def html_if_stateID(id):
+    """display html page; customize heading with state.name
+       fetch sorted cities for this state ID into LI tag ->in HTML file
+    """
+    state_obj = None
+    for state in storage.all("State").values():
+        if state.id == id:
+            state_obj = state
+    return render_template('9-states.html',
+                           state_obj=state_obj)
+
+
+@app.route('/hbnb_filters')
+def html_filters():
+    """display html page with working city/state filters & amenities
+       runs with web static css files
+    """
+    state_objs = [s for s in storage.all("State").values()]
+    amenity_objs = [a for a in storage.all("Amenity").values()]
+    return render_template('10-hbnb_filters.html',
+                           state_objs=state_objs, amenity_objs=amenity_objs)
 
 
 if __name__ == "__main__":
