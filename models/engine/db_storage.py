@@ -16,16 +16,20 @@ from models.city import City
 from models.amenity import Amenity
 from models.review import Review
 
+
 class DBStorage:
     '''
         Create SQLalchemy database
     '''
     __engine = None
     __session = None
-    classes = {"User": User, "BaseModel": BaseModel,
-           "Place": Place, "State": State,
-           "City": City, "Amenity": Amenity,
-           "Review": Review}
+    classes = {
+            "User": User,
+            "BaseModel": BaseModel,
+            "Place": Place, "State": State,
+            "City": City, "Amenity": Amenity,
+            "Review": Review
+            }
 
     def __init__(self):
         '''
@@ -45,10 +49,15 @@ class DBStorage:
         '''
         Query current database session
         '''
-        classes = {"User": User, "BaseModel": BaseModel,
-           "Place": Place, "State": State,
-           "City": City, "Amenity": Amenity,
-           "Review": Review}
+        classes = {
+                "User": User,
+                "BaseModel": BaseModel,
+                "Place": Place,
+                "State": State,
+                "City": City,
+                "Amenity": Amenity,
+                "Review": Review
+                }
         result = {}
         clses = [v for k, v in classes.items() if "BaseModel" not in k]
         if cls is not None:
@@ -60,6 +69,7 @@ class DBStorage:
                 key = "{}.{}".format(c().__class__.__name__, instance.id)
                 result[key] = instance
         return result
+
     def new(self, obj):
         '''
             Add object to current database session
@@ -92,4 +102,5 @@ class DBStorage:
         '''
             Remove private session attribute
         '''
-        self.__session.remove()
+        if self.__session:
+            self.__session.remove()
