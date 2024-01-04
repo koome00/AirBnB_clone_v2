@@ -59,6 +59,8 @@ class BaseModel:
         tmp_var = self.__dict__
 
         for key, values in tmp_var.items():
+            if '_sa_instance_state' in dict_objs:
+                del dict_objs['_sa_instance_state']
             if key == 'created_at' or key == 'updated_at':
                 dict_objs[key] = values.strftime('%Y-%m-%dT%H:%M:%S.%f')
             else:
@@ -66,7 +68,7 @@ class BaseModel:
                     pass
                 else:
                     dict_objs[key] = values
-        del dict_objs['_sa_instance_state']
+        
         dict_objs['__class__'] = type(self).__name__
         return dict_objs
 

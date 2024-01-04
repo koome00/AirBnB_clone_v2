@@ -34,40 +34,38 @@ class HBNBCommand(cmd.Cmd):
         """Quit command to exit the program"""
         return True
 
-    def do_EOF(self, line):
-        """Quit command to exit the program at end of file"""
-        return True
-
     def do_create(self, arg):
         '''
-            Create a new instance of class BaseModel and saves it
-            to the JSON file.
+        Create a new instance of class BaseModel and saves it
+        to the JSON file.
         '''
         if len(arg) == 0:
             print("** class name missing **")
             return
-        try:
-            args = arg.split(" ")
-            new_instance = HBNBCommand.all_classes[args[0]]()
-            for i in args[1:]:
+
+        args = arg.split(" ")
+        cls_name = args[0].strip("'")
+
+        if cls_name not in HBNBCommand.all_classes:
+            print("** class doesn't exist **")
+            return
+
+        new_instance = HBNBCommand.all_classes[cls_name]()
+    
+        for param in args[1:]:
+            k, v = map(lambda x: x.strip("'\""), param.split('='))
+            if hasattr(new_instance, k):
+                v = v.replace("_", " ")
                 try:
-                    key = i.split('=')[0]
-                    value = i.split('=').strip('"')[1]
-                    if hasattr(new_instance, key):
-                        value = value.replace("_", ' ')
-                        try:
-                            value = eval(value)
-                        except:
-                            pass
-                        setattr(new_instance, key, value)
-                except (ValueError, IndexError):
+                    v = eval(v)
+                except:
                     pass
-                new_instance.save()
-                print(new_instance.id)
-        except:
-                print("** class doesn't exist **")
-                return
- 
+                setattr(new_instance, k, v)
+
+        new_instance.save()
+        print(new_instance.id)
+        return        
+
     def do_show(self, line):
         """
         Prints the string representation
