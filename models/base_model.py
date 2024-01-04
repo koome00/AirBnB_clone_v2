@@ -3,7 +3,7 @@
 import uuid
 from datetime import datetime
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import String, DateTime, Column
+from sqlalchemy import String, DateTime, Column, VARCHAR
 import models
 
 Base = declarative_base()
@@ -12,7 +12,7 @@ Base = declarative_base()
 class BaseModel:
     """A base class for all hbnb models"""
 
-    id = Column(String(60), unique=True, nullable=False,
+    id = Column(VARCHAR(60), unique=True, nullable=False,
                 primary_key=True)
     created_at = Column(DateTime, nullable=False, default=datetime.utcnow())
     update_at = Column(DateTime, nullable=False, default=datetime.utcnow())

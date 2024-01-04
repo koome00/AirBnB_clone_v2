@@ -64,7 +64,8 @@ class HBNBCommand(cmd.Cmd):
 
         new_instance.save()
         print(new_instance.id)
-        return        
+        return
+          
 
     def do_show(self, line):
         """
